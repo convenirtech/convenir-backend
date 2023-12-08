@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"nodemon server.ts"
+    "start": "nodemon server.ts"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +28,7 @@
     "morgan": "^1.10.0",
     "nodemon": "^3.0.1",
     "path": "^0.12.7",
+    "prisma": "^5.7.0",
     "typescript": "^5.2.2"
   }
 }
