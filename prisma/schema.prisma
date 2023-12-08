@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+  id Int @id @default(autoincrement())
+  username String @unique
+  email String @unique
+  password String
+  role     UserRole @default(user)
+  carts          Cart[]
+  orders         Order[]
+  supportTickets SupportTicket[]
+  deliveries     Delivery[]
+  products Product[]
+}
+
+enum UserRole {
+  admin
+  user
+  deliver
+}
+
+model Product{
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  price Int
+  categoryId Int?
+  category Category? @relation(fields: [categoryId], references: [id])
+  users       User?   @relation(fields: [userId], references: [id])
+  userId      Int?
+  carts       Cart[] 
+}
+
+model Category{
+  id Int @id @default(autoincrement())
+  name String
+  products Product[]
+}
+
+model Cart{
+  id Int @id @default(autoincrement())
+  userId Int?
+  productId Int?
+  quantity Int
+  amount Int
+  user      User?   @relation(fields: [userId], references: [id])
+  product   Product? @relation(fields: [productId], references: [id])
+}
+
+model Order{
+  id Int @id @default(autoincrement())
+  userId Int?
+  totalAmount Int
+  orderDate DateTime @default(now())
+  deliveryDate DateTime
+  user         User?     @relation(fields: [userId], references: [id])
+  delivery     Delivery[]
+}
+model Delivery{
+  id Int @id @default(autoincrement())
+  orderId Int?
+  status Boolean
+  estimatedArrival DateTime
+  deliveryGuyId Int?
+  order            Order?    @relation(fields: [orderId], references: [id])
+  deliveryGuy      User?     @relation(fields: [deliveryGuyId], references: [id])
+}
+model SupportTicket{
+  id Int @id @default(autoincrement())
+  userId Int?
+  channel Int
+  message String
+  status Boolean
+  user   User?   @relation(fields: [userId], references: [id])
+}
