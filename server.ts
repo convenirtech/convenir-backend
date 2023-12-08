@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import logger from "morgan";
 import fs from "fs";
 import path from "path";
+import userRouter from "./src/routes/user-routes";
 
 dotenv.config();
 
@@ -40,6 +41,8 @@ app.use(
     }),
   })
 );
+
+app.use('/',userRouter);
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
